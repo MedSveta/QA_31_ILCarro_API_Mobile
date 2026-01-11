@@ -12,28 +12,30 @@ import java.net.URL;
 
 public class AppiumConfig {
     public static AppiumDriver<AndroidElement> driver;
+    public static int height = 0, width = 0;
 
     @BeforeMethod
     public void setup() {
-        {
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.setCapability("platformName", "Android");
+        desiredCapabilities.setCapability("deviceName", "Pixel");
+        desiredCapabilities.setCapability("platformVersion", "8.0");
+        desiredCapabilities.setCapability("appPackage", "com.telran.ilcarro");
+        desiredCapabilities.setCapability("appActivity", ".SplashActivity");
 
-            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-            desiredCapabilities.setCapability("platformName", "Android");
-            desiredCapabilities.setCapability("deviceName", "Pixel");
-            desiredCapabilities.setCapability("platformVersion", "8.0");
-            desiredCapabilities.setCapability("appPackage", "com.telran.ilcarro");
-            desiredCapabilities.setCapability("appActivity", ".SplashActivity");
+        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Appium");
 
-            desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Appium");
+        String url = "http://localhost:4723/wd/hub";
 
-            String url = "http://localhost:4723/wd/hub";
-
-            try {
-                driver = new AppiumDriver<>(new URL(url), desiredCapabilities);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            driver = new AppiumDriver<>(new URL(url), desiredCapabilities);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
         }
+
+        height = driver.manage().window().getSize().getHeight();
+        width = driver.manage().window().getSize().getWidth();
+
     }
 
     @AfterMethod(enabled = false)
